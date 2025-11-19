@@ -113,6 +113,7 @@ export default {
       zycdChecked: ['55', '56', '57'],
       zycdChannelList: [{ key: '一级', value: '456', color: 'red' }, { key: '二级', value: '457', color: 'green' }, { key: '三级', value: '458', color: 'green' }],
       zycdChannelChecked:['456', '457', '458'],
+      isShowChannel: false
     }
   },
   mounted() {

@@ -67,50 +67,57 @@ export default {
     },
     addChannelEquipment() {
       const map = this.map;
-      // 1. 定义 sblx 与图片的对应关系
+
+      // 1. 定义 fslx 与图片的对应关系
       const imageMap = {
-        转弯井: require("@/assets/img/1.png"),
-        直通井: require("@/assets/img/2.png"),
-        转角井: require("@/assets/img/3.png"),
-        接头井: require("@/assets/img/1.png"),
-        三通井: require("@/assets/img/2.png"),
-        四通井: require("@/assets/img/3.png"),
-        余缆井: require("@/assets/img/2.png"),
-        直线井: require("@/assets/img/3.png")
+        转弯井: require("@/assets/img/A1.png"),
+        直通井: require("@/assets/img/A2.png"),
+        转角井: require("@/assets/img/A3.png"),
+        接头井: require("@/assets/img/A1.png"),
+        三通井: require("@/assets/img/A2.png"),
+        四通井: require("@/assets/img/A3.png"),
+        余缆井: require("@/assets/img/A2.png"),
+        直线井: require("@/assets/img/A3.png")
       };
-      // 2. 根据 sblx 对数据进行分组（每种图片一个图层）
+
+      // 2. 根据 fslx 对数据进行分组（每种图片一个图层）
       const grouped = {};
       this.channelFacilityData.features.forEach((f) => {
-        const key = f.properties.sblx;
+        const key = f.properties.fslx;
         if (!grouped[key]) grouped[key] = [];
         grouped[key].push(f);
       });
-      // 3. 为每种 sblx 加载图片 → 添加图层
-      Object.keys(grouped).forEach((sblx) => {
-        const imgUrl = imageMap[sblx];
+
+      // 3. 为每种 fslx 加载图片 → 添加图层
+      Object.keys(grouped).forEach((fslx) => {
+        const imgUrl = imageMap[fslx];
+
         // 加载图片
         map.loadImage(imgUrl, (err, image) => {
           if (err) {
             console.error("图片加载失败:", imgUrl);
             return;
           }
+
           // 注册图片
-          const imageId = `icon-${sblx}`;
+          const imageId = `icon-${fslx}`;
           if (!map.hasImage(imageId)) {
             map.addImage(imageId, image);
           }
+
           // 添加数据源
-          const sourceId = `source-${sblx}`;
+          const sourceId = `source-${fslx}`;
           map.addSource(sourceId, {
             type: "geojson",
             data: {
               type: "FeatureCollection",
-              features: grouped[sblx]
+              features: grouped[fslx]
             }
           });
+
           // 添加图层
           map.addLayer({
-            id: `layer-${sblx}`,
+            id: `layer-${fslx}`,
             type: "symbol",
             source: sourceId,
             layout: {
@@ -120,6 +127,34 @@ export default {
             }
           });
         });
+      });
+    },
+    addChannelEquipment() {
+      this.map.addSource('channel-points', {
+        type: 'geojson',
+        data: this.channelFacilityData
+      });
+      map.addImage("poi", this.image);
+      this.map.addLayer({
+        id: 'channel-points-layer',
+        type: 'symbol',
+        source: 'channel-points',
+        layout: {
+          "icon-image": "poi",
+          "icon-size": 1,
+          "text-field": "{name}",
+          "text-size": 12,
+          "text-anchor": "top",
+          "icon-anchor": "bottom",
+          "text-offset": [0, 0],
+          "text-max-width": 8,
+          "text-font": ["Microsoft YaHei Regular"],
+        },
+        paint: {
+          "text-color": "#ff0000",
+          "text-halo-color": "#FFFFFF",
+          "text-halo-width": 1.33333,
+        }
       });
     },
     addChannelSegment() {
@@ -149,97 +184,10 @@ export default {
             '104','#1E90FF',
             '#fff'
           ],
-          'line-width': 8
-        }
-      });
-      this.map.addLayer({
-        id: 'channel-lines-labels',
-        type: 'symbol',
-        source: 'channel-lines',
-        layout: {
-          "text-font": ["Microsoft YaHei Regular"],
-          "symbol-placement": "line",
-          "text-ignore-placement": true,
-          "text-field": "{name}",
-          "text-size": 16,
-          "text-allow-overlap": false,
-          "text-max-width": 8,
-        },
-        paint: {
-          "text-color": '#fff',
-          "text-halo-color": "#000",
-          "text-halo-width": 1.33333
+          'line-width': 10
         }
       });
     },
-    // function addChannelEquipment(data) {
-//   const imageMap = {
-//     '1': require("@/assets/img/1.png"),
-//     '2': require("@/assets/img/2.png"),
-//     '3': require("@/assets/img/3.png"),
-//     '4': require("@/assets/img/4.png"),
-//     '5': require("@/assets/img/5.png"),
-//     '6': require("@/assets/img/6.png"),
-//     '7': require("@/assets/img/7.png"),
-//     '8': require("@/assets/img/8.png")
-//   };
-
-//   // ② 按 sblxid 对数据分组
-//   const grouped = {};
-//   data.features.forEach((f) => {
-//     const sblxid = f.properties.sblxid || '0';
-//     if (!grouped[sblxid]) grouped[sblxid] = [];
-//     grouped[sblxid].push(f);
-//   });
-//   // console.log("groupeddddddddddd", grouped)
-//   // ③ 为每种设备类型加载图层
-//   Object.keys(grouped).forEach((sblxid) => {
-
-//     const imgUrl = imageMap[sblxid];
-//     if (!imgUrl) {
-//       console.warn(`未找到 ${sblxid} 对应的图标`);
-//       return;
-//     }
-
-//     const imageId = `icon-${sblxid}`;
-//     const sourceId = `source-${sblxid}`;
-//     const layerId  = `layer-${sblxid}`;
-
-//     const addLayerWork = () => {
-//       // 添加 GeoJSON 数据源
-//       addGeoSource(sourceId, {
-//         type: "FeatureCollection",
-//         features: grouped[sblxid]
-//       });
-//       // 添加图层（存在则跳过）
-//       addMapLayer({
-//         id: layerId,
-//         type: "symbol",
-//         source: sourceId,
-//         layout: {
-//           "icon-image": imageId,
-//           "icon-size": 3,
-//           "icon-allow-overlap": true
-//         }
-//       })
-//     };
-//     //如果图片已加载 → 不再重复 loadImage
-//    if (map.hasImage(imageId)) {
-//       addLayerWork();
-//     } else {
-//       map.loadImage(imgUrl, (err, image) => {
-//         if (err) {
-//           console.error(`图片加载失败: ${imgUrl}`, err);
-//           return;
-//         }
-//         if (!map.hasImage(imageId)) {
-//           map.addImage(imageId, image);
-//         }
-//         addLayerWork();
-//       });
-//     }
-//   });
-// }
   },
 }
 </script>

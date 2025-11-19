@@ -24,10 +24,10 @@
         <el-button slot="reference">AAA</el-button>
       </el-popover>
 
-      <el-popover placement="bottom" width="200" trigger="click" content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
+      <el-popover placement="bottom" title="标题" width="200" trigger="click" content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
         <div>
           <div style="height: 24px;font-size: 18px;margin-bottom: 8px;">通道设施</div>
-          <el-checkbox-group class="map-checkbox" v-model="tdsbChecked">
+          <el-checkbox-group class="map-checkbox" v-model="dlssChecked">
             <el-checkbox v-for="item in tdsbList" :key="item.value" :label="item.value">
               <div style="display: flex;justify-content: space-between;height: 16px;"><span>{{ item.key }}</span><span
                   :style="{ width: '30px', 'background-color': item.color }"></span></div>
@@ -61,18 +61,6 @@
         </div>
         <el-button slot="reference">电缆等级</el-button>
       </el-popover>
-       <el-popover placement="bottom" width="200" trigger="click">
-        <div>
-          <div style="height: 24px;font-size: 18px;margin-bottom: 8px;">通道等级</div>
-          <el-checkbox-group class="map-checkbox" v-model="zycdChannelChecked">
-            <el-checkbox v-for="item in zycdChannelList" :key="item.value" :label="item.value">
-              <div style="display: flex;justify-content: space-between;height: 16px;"><span>{{ item.key }}</span><span
-                  :style="{ width: '30px', 'background-color': item.color }"></span></div>
-            </el-checkbox>
-          </el-checkbox-group>
-        </div>
-        <el-button slot="reference">通道等级</el-button>
-      </el-popover>
     </div>
   </div>
 
@@ -80,7 +68,8 @@
 
 <script>
 // @ is an alias to /src
-import { genMap, filterCableLine, filterChannelLine  } from './mapUtils'
+import lineData from './data/lineData.json'
+import { genMap, filterMap } from './mapUtils'
 export default {
   name: 'HomeView',
   components: {
@@ -102,36 +91,27 @@ export default {
         { key: '转角井', value: '转角井', color: 'red' }, { key: '接头井', value: '接头井', color: 'green' },
         { key: '三通井', value: '三通井', color: 'red' }, { key: '四通井', value: '四通井', color: 'green' },
         { key: '余缆井', value: '余缆井', color: 'red' }, { key: '直线井', value: '直线井', color: 'green' }
-      ], 
-      tdsbChecked: ['转弯井', '直通井', '转角井', '接头井', '三通井', '四通井', '余缆井', '直线井',],
-      //电缆设施
+      ], //电缆设施
 
       dlssList: [{ key: '电缆终端', value: '电缆终端', color: 'red' }, { key: '中间接头', value: '中间接头', color: 'green' }], //电缆设施
       dlssChecked: ['电缆终端', '中间接头'],
 
       zycdList: [{ key: '一级', value: '55', color: 'red' }, { key: '二级', value: '56', color: 'green' }, { key: '三级', value: '57', color: 'green' }], //电缆等级(重要程度)
-      zycdChecked: ['55', '56', '57'],
-      zycdChannelList: [{ key: '一级', value: '456', color: 'red' }, { key: '二级', value: '457', color: 'green' }, { key: '三级', value: '458', color: 'green' }],
-      zycdChannelChecked:['456', '457', '458'],
+      zycdChecked: ['55', '56', '57']
+
     }
   },
   mounted() {
-    genMap('map').then((map) => this.map = map)
+    genMap('map', lineData).then((map) => this.map = map)
   },
   computed: {
-    filterCableCondition() {
+    filterCondition() {
       return { dydj: this.dydjChecked, zycd: this.zycdChecked }
-    },
-    filterChannelCondition() {
-      return { fslx: this.fsfsChecked, zycd: this.zycdChannelChecked }
     }
   },
   watch: {
-    filterCableCondition() {
-      filterCableLine(this.map, this.filterCableCondition)
-    },
-    filterChannelCondition() {
-      filterChannelLine(this.map, this.filterChannelCondition)
+    filterCondition() {
+      filterMap(this.map, this.filterCondition)
     }
 
   }

@@ -1,6 +1,7 @@
 <template>
   <div style="width: 100%;height: 100%;position: relative;">
     <div id="map" style="width: 100%; height: 100%"></div>
+    <h1>{{ tdsbChecked }}</h1>
     <div style="position: absolute;left: 40px;bottom: 40px;z-index: 99999;">
       <el-popover placement="bottom" width="200" trigger="click">
         <div>
@@ -61,18 +62,6 @@
         </div>
         <el-button slot="reference">电缆等级</el-button>
       </el-popover>
-       <el-popover placement="bottom" width="200" trigger="click">
-        <div>
-          <div style="height: 24px;font-size: 18px;margin-bottom: 8px;">通道等级</div>
-          <el-checkbox-group class="map-checkbox" v-model="zycdChannelChecked">
-            <el-checkbox v-for="item in zycdChannelList" :key="item.value" :label="item.value">
-              <div style="display: flex;justify-content: space-between;height: 16px;"><span>{{ item.key }}</span><span
-                  :style="{ width: '30px', 'background-color': item.color }"></span></div>
-            </el-checkbox>
-          </el-checkbox-group>
-        </div>
-        <el-button slot="reference">通道等级</el-button>
-      </el-popover>
     </div>
   </div>
 
@@ -80,7 +69,8 @@
 
 <script>
 // @ is an alias to /src
-import { genMap, filterCableLine, filterChannelLine  } from './mapUtils'
+import lineData from './data/lineData.json'
+import { genMap, filterMap } from './mapUtils'
 export default {
   name: 'HomeView',
   components: {
@@ -110,28 +100,21 @@ export default {
       dlssChecked: ['电缆终端', '中间接头'],
 
       zycdList: [{ key: '一级', value: '55', color: 'red' }, { key: '二级', value: '56', color: 'green' }, { key: '三级', value: '57', color: 'green' }], //电缆等级(重要程度)
-      zycdChecked: ['55', '56', '57'],
-      zycdChannelList: [{ key: '一级', value: '456', color: 'red' }, { key: '二级', value: '457', color: 'green' }, { key: '三级', value: '458', color: 'green' }],
-      zycdChannelChecked:['456', '457', '458'],
+      zycdChecked: ['55', '56', '57']
+
     }
   },
   mounted() {
-    genMap('map').then((map) => this.map = map)
+    // genMap('map', lineData).then((map) => this.map = map)
   },
   computed: {
-    filterCableCondition() {
+    filterCondition() {
       return { dydj: this.dydjChecked, zycd: this.zycdChecked }
-    },
-    filterChannelCondition() {
-      return { fslx: this.fsfsChecked, zycd: this.zycdChannelChecked }
     }
   },
   watch: {
-    filterCableCondition() {
-      filterCableLine(this.map, this.filterCableCondition)
-    },
-    filterChannelCondition() {
-      filterChannelLine(this.map, this.filterChannelCondition)
+    filterCondition() {
+      filterMap(this.map, this.filterCondition)
     }
 
   }

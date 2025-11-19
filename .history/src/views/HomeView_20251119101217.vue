@@ -112,7 +112,8 @@ export default {
       zycdList: [{ key: '一级', value: '55', color: 'red' }, { key: '二级', value: '56', color: 'green' }, { key: '三级', value: '57', color: 'green' }], //电缆等级(重要程度)
       zycdChecked: ['55', '56', '57'],
       zycdChannelList: [{ key: '一级', value: '456', color: 'red' }, { key: '二级', value: '457', color: 'green' }, { key: '三级', value: '458', color: 'green' }],
-      zycdChannelChecked:['456', '457', '458'],
+      zycdChannelChecked:['456', '457', '458']
+
     }
   },
   mounted() {
@@ -122,7 +123,7 @@ export default {
     filterCableCondition() {
       return { dydj: this.dydjChecked, zycd: this.zycdChecked }
     },
-    filterChannelCondition() {
+     filterChannelCondition() {
       return { fslx: this.fsfsChecked, zycd: this.zycdChannelChecked }
     }
   },

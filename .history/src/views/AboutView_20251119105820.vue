@@ -67,6 +67,7 @@ export default {
     },
     addChannelEquipment() {
       const map = this.map;
+
       // 1. 定义 sblx 与图片的对应关系
       const imageMap = {
         转弯井: require("@/assets/img/1.png"),
@@ -172,74 +173,6 @@ export default {
         }
       });
     },
-    // function addChannelEquipment(data) {
-//   const imageMap = {
-//     '1': require("@/assets/img/1.png"),
-//     '2': require("@/assets/img/2.png"),
-//     '3': require("@/assets/img/3.png"),
-//     '4': require("@/assets/img/4.png"),
-//     '5': require("@/assets/img/5.png"),
-//     '6': require("@/assets/img/6.png"),
-//     '7': require("@/assets/img/7.png"),
-//     '8': require("@/assets/img/8.png")
-//   };
-
-//   // ② 按 sblxid 对数据分组
-//   const grouped = {};
-//   data.features.forEach((f) => {
-//     const sblxid = f.properties.sblxid || '0';
-//     if (!grouped[sblxid]) grouped[sblxid] = [];
-//     grouped[sblxid].push(f);
-//   });
-//   // console.log("groupeddddddddddd", grouped)
-//   // ③ 为每种设备类型加载图层
-//   Object.keys(grouped).forEach((sblxid) => {
-
-//     const imgUrl = imageMap[sblxid];
-//     if (!imgUrl) {
-//       console.warn(`未找到 ${sblxid} 对应的图标`);
-//       return;
-//     }
-
-//     const imageId = `icon-${sblxid}`;
-//     const sourceId = `source-${sblxid}`;
-//     const layerId  = `layer-${sblxid}`;
-
-//     const addLayerWork = () => {
-//       // 添加 GeoJSON 数据源
-//       addGeoSource(sourceId, {
-//         type: "FeatureCollection",
-//         features: grouped[sblxid]
-//       });
-//       // 添加图层（存在则跳过）
-//       addMapLayer({
-//         id: layerId,
-//         type: "symbol",
-//         source: sourceId,
-//         layout: {
-//           "icon-image": imageId,
-//           "icon-size": 3,
-//           "icon-allow-overlap": true
-//         }
-//       })
-//     };
-//     //如果图片已加载 → 不再重复 loadImage
-//    if (map.hasImage(imageId)) {
-//       addLayerWork();
-//     } else {
-//       map.loadImage(imgUrl, (err, image) => {
-//         if (err) {
-//           console.error(`图片加载失败: ${imgUrl}`, err);
-//           return;
-//         }
-//         if (!map.hasImage(imageId)) {
-//           map.addImage(imageId, image);
-//         }
-//         addLayerWork();
-//       });
-//     }
-//   });
-// }
   },
 }
 </script>
