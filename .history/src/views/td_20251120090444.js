@@ -1,4 +1,4 @@
-[
+const arr = [
   {
     "tdid": "0308308da98841cd83760cb5502ac63b",
     "tdmc": "东湖新城青和线隧道",
@@ -37053,3 +37053,32 @@
     ]
   }
 ]
+
+const lineGeo = {
+  type: 'FeatureCollection',
+  features:[]
+};
+arr.forEach(item => {
+  lineGeo.features.push(
+    {
+      "type": "Feature",
+      "id": item.tdid,
+      "geometry": {
+          "type": "LineString",
+          "coordinates": item.geom_new
+      },
+      "geometry_name": "GEOM",
+      "properties": {
+        "tdid": item.tdid,
+        "name": item.tdmc,
+        "zycd": item.zycd,
+        "whbz": item.whbz,
+        "ywdw": item.ywdw,
+        "cityid": item.cityid,
+        "groupid": item.groupid,
+        "owner": item.owner,
+      }
+    }
+  )
+});
+export default lineGeo;

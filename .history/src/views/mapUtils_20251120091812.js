@@ -1,5 +1,5 @@
 import lineData from './data/lineData.json'
-import channelData from "./td.js";
+import TD from "./td.js";
 import channelMultiData from "./tdd.js";
 import channelFacilityData from "./tdsbNew.js";
 
@@ -241,7 +241,6 @@ export const genMap = (container) => {
 
     map.on('load', () => {
       addPowerLines(lineData);
-      // addChannel(channelData);
       addChannelEquipment(channelFacilityData);
     });
 

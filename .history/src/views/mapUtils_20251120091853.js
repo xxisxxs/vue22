@@ -241,7 +241,7 @@ export const genMap = (container) => {
 
     map.on('load', () => {
       addPowerLines(lineData);
-      // addChannel(channelData);
+      addChannel(channelData);
       addChannelEquipment(channelFacilityData);
     });
 

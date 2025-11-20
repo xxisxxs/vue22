@@ -1,5 +1,5 @@
 import lineData from './data/lineData.json'
-import channelData from "./td.js";
+import TD from "./td.js";
 import channelMultiData from "./tdd.js";
 import channelFacilityData from "./tdsbNew.js";
 
@@ -123,42 +123,7 @@ function addChannelEquipment(data) {
       console.error("加载图片过程中出现错误", err);
     });
 }
-// 添加通道
-function addChannel(data) {
-  addGeoSource('channelMax-lines', data);
-  addMapLayer({
-    id: 'channelMax-lines-layer',
-    type: 'line',
-    source: 'channelMax-lines',
-    layout: {
-      'line-join': 'round',
-      'line-cap': 'round'
-    },
-    paint: {
-      'line-color': 'red',
-      'line-width': 8
-    }
-  });
-  addMapLayer({
-    id: 'channelMax-lines-labels',
-    type: 'symbol',
-    source: 'channelMax-lines',
-    layout: {
-      "text-font": ["Microsoft YaHei Regular"],
-      "symbol-placement": "line",
-      "text-ignore-placement": true,
-      "text-field": "{name}",
-      "text-size": 16,
-      "text-allow-overlap": false,
-      "text-max-width": 8
-    },
-    paint: {
-      "text-color": '#fff',
-      "text-halo-color": "#000",
-      "text-halo-width": 1.33333
-    }
-  });
-}
+
 // 添加通道段
 function addChannelSegment(data) {
   addGeoSource('channel-lines', data);
@@ -241,7 +206,6 @@ export const genMap = (container) => {
 
     map.on('load', () => {
       addPowerLines(lineData);
-      // addChannel(channelData);
       addChannelEquipment(channelFacilityData);
     });
 
